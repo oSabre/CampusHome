@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  /* Aqui você pode criar cores personalizadas para o projeto */
+  --color-ufrn-blue: #003da5;
+  --color-ufrn-gold: #f2a900;
+}
+
+/* Se quiser um fundo padrão para o corpo da página */
+body {
+  @apply bg-gray-50 text-gray-900;
+}
