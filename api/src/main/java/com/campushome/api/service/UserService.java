@@ -3,8 +3,10 @@ package com.campushome.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.campushome.api.dto.UserRequestDTO;
+import com.campushome.api.dto.OwnerRegistrationDTO;
+import com.campushome.api.dto.StudentRegistrationDTO;
 import com.campushome.api.dto.UserResponseDTO;
+import com.campushome.api.enums.UserRole;
 import com.campushome.api.model.User;
 import com.campushome.api.repository.UserRepository;
 
@@ -14,7 +16,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserResponseDTO register(UserRequestDTO request) {
+    public UserResponseDTO registerStudent(StudentRegistrationDTO request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Este e-mail já está em uso.");
         }
@@ -25,6 +27,27 @@ public class UserService {
         user.setPassword(request.getPassword());
         user.setCourse(request.getCourse());
         user.setBio(request.getBio());
+        user.setTelefone(request.getTelefone());
+        user.setRole(UserRole.STUDENT);
+
+        User savedUser = userRepository.save(user);
+
+        return convertToResponseDTO(savedUser);
+    }
+
+    public UserResponseDTO registerOwner(OwnerRegistrationDTO request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Este e-mail já está em uso.");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setCpfCnpj(request.getCpfCnpj());
+        user.setBio(request.getBio());
+        user.setTelefone(request.getTelefone());
+        user.setRole(UserRole.OWNER);
 
         User savedUser = userRepository.save(user);
 
@@ -44,7 +67,10 @@ public class UserService {
             user.getName(),
             user.getEmail(),
             user.getCourse(),
-            user.getBio()
+            user.getBio(),
+            user.getTelefone(),
+            user.getCpfCnpj(),
+            user.getRole()
         );
     }
 }

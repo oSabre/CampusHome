@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.campushome.api.dto.UserRequestDTO;
+import com.campushome.api.dto.OwnerRegistrationDTO;
+import com.campushome.api.dto.StudentRegistrationDTO;
 import com.campushome.api.dto.UserResponseDTO;
 import com.campushome.api.service.UserService;
 
@@ -23,9 +24,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRequestDTO request) {
-        UserResponseDTO response = userService.register(request);
+    @PostMapping("/register/student")
+    public ResponseEntity<UserResponseDTO> registerStudent(@RequestBody StudentRegistrationDTO request) {
+        UserResponseDTO response = userService.registerStudent(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/register/owner")
+    public ResponseEntity<UserResponseDTO> registerOwner(@RequestBody OwnerRegistrationDTO request) {
+        UserResponseDTO response = userService.registerOwner(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

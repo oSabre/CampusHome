@@ -2,9 +2,13 @@ package com.campushome.api.model;
 
 import java.util.List;
 
+import com.campushome.api.enums.UserRole;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,7 +42,16 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    private String telefone;
+
+    // Apenas para estudantes
     private String course; // Literalmente o curso do usuário
+
+    // Para Anúnciadores
+    private String cpfCnpj;
 
     @Column(columnDefinition = "TEXT")
     private String bio; // Para o perfil e matching.
