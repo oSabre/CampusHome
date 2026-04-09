@@ -11,4 +11,5 @@ public class UserRequestDTO {
     private String password;
     private String course;
     private String bio;
+    private String preferences;
 }

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.campushome.api.dto.AdRequestDTO;
 import com.campushome.api.dto.AdResponseDTO;
 import com.campushome.api.model.Advertisement;
+import com.campushome.api.model.AdvertisementStatus;
 import com.campushome.api.model.User;
+import com.campushome.api.model.UserRole;
 import com.campushome.api.repository.AdvertisementRepository;
 import com.campushome.api.repository.UserRepository;
 
@@ -25,6 +27,10 @@ public class AdService {
 
     public AdResponseDTO publish(AdRequestDTO request){
         User owner = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("Usuário Não Encontrado."));
+
+        if(owner.getRole() != UserRole.OWNER){
+            throw new RuntimeException("\"Apenas usuários com perfil OWNER podem publicar anúncios.\"");
+        }
 
         Advertisement ad = new Advertisement();
         ad.setTitle(request.getTitle());

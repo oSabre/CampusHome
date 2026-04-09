@@ -13,4 +13,5 @@ public class UserResponseDTO {
     private String email;
     private String course;
     private String bio;
+    private String preferences;
 }

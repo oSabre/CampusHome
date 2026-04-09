@@ -5,6 +5,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,15 +36,22 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
-
+    
     @Column(nullable = false)
     private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     private String course; // Literalmente o curso do usuário
 
     @Column(columnDefinition = "TEXT")
     private String bio; // Para o perfil e matching.
 
+    @Column(columnDefinition = "TEXT")
+    private String preferences;
+    
     // Um usuário pode ter vários anúncios
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Advertisement> advertisements;
