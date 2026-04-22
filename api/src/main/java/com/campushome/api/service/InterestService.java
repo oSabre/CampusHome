@@ -29,6 +29,9 @@ public class InterestService {
     @Autowired
     private AdvertisementRepository adRepository;
 
+    @Autowired
+    private HousingGroupService housingGroupService;
+
     public InterestResponseDTO createInterest(InterestRequestDTO request){
         User student = userRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new RuntimeException("Estudante não encontrado."));
@@ -78,6 +81,13 @@ public class InterestService {
 
         interest.setStatus(newStatus);
         Interest updatedInterest = interestRepository.save(interest);
+
+        if(newStatus == InterestStatus.ACCEPTED){
+            housingGroupService.addResidentToGroup(
+                updatedInterest.getAdvertisement(),
+                updatedInterest.getStudent()
+            );
+        }
 
         return convertToResponseDTO(updatedInterest);
     }
