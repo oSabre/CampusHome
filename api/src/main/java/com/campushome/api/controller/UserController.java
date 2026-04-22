@@ -17,7 +17,7 @@ import com.campushome.api.dto.UserResponseDTO;
 import com.campushome.api.service.UserService;
 
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
 public class UserController {
