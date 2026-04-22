@@ -71,4 +71,20 @@ public class InterestService {
                 interest.getCreatedAt()
         );
     }
+
+    public InterestResponseDTO updateStatus(Long interestId, InterestStatus newStatus){
+        Interest interest = interestRepository.findById(interestId)
+            .orElseThrow(() -> new RuntimeException("Interesse não encontrado."));
+
+        interest.setStatus(newStatus);
+        Interest updatedInterest = interestRepository.save(interest);
+
+        return convertToResponseDTO(updatedInterest);
+    }
+
+    public List<InterestResponseDTO> getPendingInterestsForOwner(Long ownerId) {
+        List<Interest> pendingInterests = interestRepository.findByOwnerIdAndStatus(ownerId, InterestStatus.PENDING);
+    
+        return pendingInterests.stream().map(interest -> new InterestResponseDTO(interest)).collect(Collectors.toList());
+    }
 }

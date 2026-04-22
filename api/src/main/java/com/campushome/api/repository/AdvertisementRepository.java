@@ -10,13 +10,15 @@ import com.campushome.api.model.Advertisement;
 
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>{
-    List<Advertisement> findByNeighborhood(String neighborhood);
+    List<Advertisement> findByActiveTrueAndNeighborhood(String neighborhood);
 
-    List<Advertisement> findByPriceLessThanEqual(BigDecimal price);
+    List<Advertisement> findByActiveTrueAndPriceLessThanEqual(BigDecimal price);
 
-    List<Advertisement> findByNeighborhoodAndPriceLessThanEqual(String neighborhood, BigDecimal price);
+    List<Advertisement> findByActiveTrueAndNeighborhoodAndPriceLessThanEqual(String neighborhood, BigDecimal price);
 
-    List<Advertisement> findByTitleContainingIgnoreCase(String title);
+    List<Advertisement> findByActiveTrueAndTitleContainingIgnoreCase(String title);
+
+    List<Advertisement> findByActiveTrue();
 
 
 }

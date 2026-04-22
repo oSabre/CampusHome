@@ -44,6 +44,8 @@ public class Advertisement {
 
     private LocalDateTime createdAt;
 
+    private boolean active = true;
+
     // Relacionamento: Muitos anúncios pertencem a um único usuário (Dono)
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

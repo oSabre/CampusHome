@@ -46,7 +46,8 @@ public class AdService {
             savedAd.getTitle(), 
             savedAd.getPrice(), 
             savedAd.getNeighborhood(), 
-            owner.getName()
+            owner.getName(),
+            savedAd.isActive()
         );
     }
 
@@ -54,13 +55,13 @@ public class AdService {
         List<Advertisement> ads;
 
         if(neighborhood != null && maxPrice != null){
-            ads = adRepository.findByNeighborhoodAndPriceLessThanEqual(neighborhood, maxPrice);
+            ads = adRepository.findByActiveTrueAndNeighborhoodAndPriceLessThanEqual(neighborhood, maxPrice);
         } else if (neighborhood != null) {
-            ads = adRepository.findByNeighborhood(neighborhood);
+            ads = adRepository.findByActiveTrueAndNeighborhood(neighborhood);
         } else if (maxPrice != null) {
-            ads = adRepository.findByPriceLessThanEqual(maxPrice);
+            ads = adRepository.findByActiveTrueAndPriceLessThanEqual(maxPrice);
         } else {
-            ads = adRepository.findAll();
+            ads = adRepository.findByActiveTrue();
         }
 
         return ads.stream().map(ad -> new AdResponseDTO(
@@ -68,7 +69,20 @@ public class AdService {
             ad.getTitle(), 
             ad.getPrice(),
             ad.getNeighborhood(),
-            ad.getOwner().getName()
+            ad.getOwner().getName(),
+            ad.isActive()
         )).collect(Collectors.toList());
+    }
+
+    public void toggleAdStatus(Long adId, Long ownerId){
+        Advertisement ad = adRepository.findById(adId)
+            .orElseThrow(() -> new RuntimeException("Anúncio não encontrado."));
+
+        if (!ad.getOwner().getId().equals(ownerId)) {
+            throw new RuntimeException("Você não tem permissão para alterar este anúncio.");
+        }
+
+        ad.setActive(!ad.isActive());
+        adRepository.save(ad);
     }
 }

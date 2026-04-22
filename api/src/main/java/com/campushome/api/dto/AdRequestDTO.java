@@ -14,4 +14,5 @@ public class AdRequestDTO {
     private String neighborhood;
     private String address;
     private Long userId;
+    private Boolean active;
 }

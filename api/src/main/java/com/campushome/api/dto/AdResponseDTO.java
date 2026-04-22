@@ -15,4 +15,5 @@ public class AdResponseDTO {
     private BigDecimal price;
     private String neighborhood;
     private String ownerName;
+    private Boolean active;
 }
