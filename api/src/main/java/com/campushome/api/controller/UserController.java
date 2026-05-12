@@ -5,21 +5,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.util.Map;
+import com.campushome.api.dto.LoginRequestDTO;
+import com.campushome.api.dto.LoginResponseDTO;
 import com.campushome.api.dto.OwnerRegistrationDTO;
 import com.campushome.api.dto.StudentRegistrationDTO;
 import com.campushome.api.dto.UserResponseDTO;
 import com.campushome.api.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
     @Autowired
     private UserService userService;
@@ -42,5 +48,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
     
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        LoginResponseDTO response = userService.login(loginRequestDTO);
+        
+        return ResponseEntity.ok(response);
+    }
     
+    @PatchMapping("/{id}/bio")
+    public ResponseEntity<Void> updateBio(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String newBio = body.get("bio");
+        userService.updateBio(id, newBio);
+        return ResponseEntity.noContent().build();
+    }
+
 }

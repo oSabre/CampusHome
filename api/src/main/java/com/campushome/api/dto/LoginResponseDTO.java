@@ -1,15 +1,17 @@
 package com.campushome.api.dto;
 
+import com.campushome.api.enums.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ResidentDTO {
+@AllArgsConstructor
+@Builder
+public class LoginResponseDTO {
     private Long id;
     private String name;
-    private String course;
-    private Integer xp;
+    private UserRole role;
 }

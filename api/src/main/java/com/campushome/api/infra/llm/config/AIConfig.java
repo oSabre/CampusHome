@@ -1,4 +1,4 @@
-package com.campushome.infra.llm.config;
+package com.campushome.api.infra.llm.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.context.annotation.Bean;

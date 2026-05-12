@@ -48,4 +48,10 @@ public class AdController {
         adService.toggleAdStatus(id, ownerId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<AdResponseDTO>> getByOwner(@PathVariable Long ownerId) {
+        List<AdResponseDTO> response = adService.getAdsByOwner(ownerId);
+        return ResponseEntity.ok(response);
+    }
 }

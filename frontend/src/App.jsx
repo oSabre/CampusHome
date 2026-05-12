@@ -4,9 +4,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import Register from './pages/Register'
+import Login from './pages/Login'
+import OwnerDashboard from './pages/OwnerDashboard';
+import CreateAd from './pages/CreateAd';
 import './App.css'
-
-const Login = () => <div className="p-10 text-2xl">Tela de Login em breve...</div>;
+import StudentDashboard from './pages/StudentDashboard';
+import HousingGroupPage from './pages/HousingGroupPage';
 
 function App() {
   return (
@@ -24,6 +27,10 @@ function App() {
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/owner-dashboard" element={<OwnerDashboard />} />
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/create-ad" element={<CreateAd />} />
+        <Route path="/housing-group/:adId" element={<HousingGroupPage />} />
       </Routes>
     </BrowserRouter>
   );

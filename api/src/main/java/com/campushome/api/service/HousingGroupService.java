@@ -49,12 +49,9 @@ public class HousingGroupService {
     }
 
     private HousingGroupResponseDTO convertToDto(HousingGroup group) {
+        // CORREÇÃO: Usar o método convertToResidentDTO que você criou lá embaixo!
         List<ResidentDTO> residentDtos = group.getResidents().stream()
-            .map(resident -> new ResidentDTO(
-                resident.getId(),
-                resident.getName(),
-                resident.getCourse()
-            ))
+            .map(this::convertToResidentDTO) // <--- Chama o método certo
             .collect(Collectors.toList());
 
         HousingGroupResponseDTO dto = new HousingGroupResponseDTO();
@@ -72,6 +69,33 @@ public class HousingGroupService {
             .orElseThrow(() -> new RuntimeException("Dashboard não encontrado para este anúncio"));
         
         return convertToDto(group);
+    }
+
+    public HousingGroupResponseDTO getGroupDtoByStudentId(Long studentId) {
+        // 1. Tenta achar o grupo pelo ID do residente
+        return housingGroupRepository.findByResidents_Id(studentId)
+                .map(group -> convertToDto(group)) // Se achou, converte para DTO
+                .orElse(null); // Se não achou, retorna null (o Controller tratará como 204)
+    }
+
+    @Transactional
+    public void updateRulesById(Long groupId, String newRules) {
+        HousingGroup group = housingGroupRepository.findById(groupId)
+            .orElseThrow(() -> new RuntimeException("Grupo não encontrado"));
+        group.setRules(newRules);
+        housingGroupRepository.save(group);
+    }
+
+    private ResidentDTO convertToResidentDTO(User user) {
+        ResidentDTO dto = new ResidentDTO();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setCourse(user.getCourse());
+        
+        // IMPORTANTE: Se o xp no User for null, passe 0 para o DTO
+        dto.setXp(user.getXp() != null ? user.getXp() : 0); 
+        
+        return dto;
     }
 
 }

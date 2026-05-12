@@ -9,8 +9,15 @@ import com.campushome.api.dto.UserResponseDTO;
 import com.campushome.api.enums.UserRole;
 import com.campushome.api.model.User;
 import com.campushome.api.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+
+import com.campushome.api.dto.LoginRequestDTO;
+import com.campushome.api.dto.LoginResponseDTO;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     @Autowired
@@ -73,4 +80,28 @@ public class UserService {
             user.getRole()
         );
     }
+
+    @Transactional(readOnly = true)
+    public LoginResponseDTO login(LoginRequestDTO request){
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()->new RuntimeException("E-mail não cadastrado"));
+
+        if(!user.getPassword().equals(request.getPassword())){
+            throw new RuntimeException("Senha Incorreta");
+        }
+
+        return LoginResponseDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .role(user.getRole())
+                .build();
+    }
+
+    @Transactional
+    public void updateBio(Long id, String bio) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        user.setBio(bio);
+        userRepository.save(user);
+    }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.campushome.api.dto.InterestRequestDTO;
 import com.campushome.api.dto.InterestResponseDTO;
+import com.campushome.api.dto.MatchResponseDTO;
 import com.campushome.api.enums.InterestStatus;
 import com.campushome.api.enums.UserRole;
 import com.campushome.api.model.Advertisement;
@@ -17,12 +18,15 @@ import com.campushome.api.repository.AdvertisementRepository;
 import com.campushome.api.repository.InterestRepository;
 import com.campushome.api.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class InterestService {
     
     @Autowired
     private InterestRepository interestRepository;
-
+    
     @Autowired
     private UserRepository userRepository;
 
@@ -31,6 +35,9 @@ public class InterestService {
 
     @Autowired
     private HousingGroupService housingGroupService;
+
+    @Autowired
+    private MatchService matchService;
 
     public InterestResponseDTO createInterest(InterestRequestDTO request){
         User student = userRepository.findById(request.getStudentId())
@@ -64,15 +71,10 @@ public class InterestService {
     }
 
     private InterestResponseDTO convertToResponseDTO(Interest interest){
-        return new InterestResponseDTO(
-                interest.getId(),
-                interest.getStudent().getId(),
-                interest.getStudent().getName(),
-                interest.getAdvertisement().getId(),
-                interest.getAdvertisement().getTitle(),
-                interest.getStatus(),
-                interest.getCreatedAt()
-        );
+        MatchResponseDTO match = matchService.calculateMatch(interest.getStudent().getId(), interest.getAdvertisement().getId());
+        InterestResponseDTO dto = new InterestResponseDTO(interest, match.getScore(), match.getJustification());
+        dto.setStudentBio(interest.getStudent().getBio());
+        return dto;
     }
 
     public InterestResponseDTO updateStatus(Long interestId, InterestStatus newStatus){
@@ -95,6 +97,6 @@ public class InterestService {
     public List<InterestResponseDTO> getPendingInterestsForOwner(Long ownerId) {
         List<Interest> pendingInterests = interestRepository.findByOwnerIdAndStatus(ownerId, InterestStatus.PENDING);
     
-        return pendingInterests.stream().map(interest -> new InterestResponseDTO(interest)).collect(Collectors.toList());
+        return pendingInterests.stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 }

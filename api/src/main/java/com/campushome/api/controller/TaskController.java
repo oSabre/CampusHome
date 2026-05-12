@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/tasks")
 @RequiredArgsConstructor
@@ -32,9 +33,8 @@ public class TaskController {
     }
 
     @PatchMapping("/{taskId}/toggle")
-    public ResponseEntity<TaskResponseDTO> toggleTask(@PathVariable Long taskId) {
-        TaskResponseDTO updatedTask = taskService.toggleTaskStatus(taskId);
-        return ResponseEntity.ok(updatedTask);
+    public ResponseEntity<TaskResponseDTO> toggleTask(@PathVariable Long taskId, @RequestParam Long userId) {
+        return ResponseEntity.ok(taskService.toggleTaskStatus(taskId, userId));
     }
 
     @DeleteMapping("/{taskId}")

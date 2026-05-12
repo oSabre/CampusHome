@@ -12,4 +12,7 @@ public interface HousingGroupRepository extends JpaRepository<HousingGroup, Long
     Optional<HousingGroup> findByAdvertisementId(Long advertisementId);
 
     boolean existsByAdvertisementId(Long advertisementId);
+
+    Optional<HousingGroup> findByResidents_Id(Long studentId);
+
 }

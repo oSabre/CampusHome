@@ -15,4 +15,5 @@ public class HousingGroupResponseDTO {
     private String advertisementTitle;
     private String houseRules;
     private List<ResidentDTO> residents;
+    //private Integer xp;
 }

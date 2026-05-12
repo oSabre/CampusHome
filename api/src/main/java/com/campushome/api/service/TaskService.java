@@ -4,8 +4,10 @@ import com.campushome.api.dto.TaskRequestDTO;
 import com.campushome.api.dto.TaskResponseDTO;
 import com.campushome.api.model.HousingGroup;
 import com.campushome.api.model.Task;
+import com.campushome.api.model.User;
 import com.campushome.api.repository.HousingGroupRepository;
 import com.campushome.api.repository.TaskRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.campushome.api.repository.UserRepository;
+
 @Service
 public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired 
     private HousingGroupRepository housingGroupRepository;
@@ -45,11 +52,28 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskResponseDTO toggleTaskStatus(Long taskId) {
+    public TaskResponseDTO toggleTaskStatus(Long taskId, Long userId) {
         Task task = taskRepository.findById(taskId)
             .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
         
-        task.setCompleted(!task.isCompleted());
+        boolean newStatus = !task.isCompleted();
+        task.setCompleted(newStatus);
+
+        User user = userRepository.findById(userId)
+        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        int xpValue = 10;
+        int currentXp = (user.getXp() == null) ? 0 : user.getXp();
+
+        if (newStatus) {
+            user.setXp(currentXp + xpValue);
+            // Opcional: Atribui a tarefa a quem terminou para registro
+            task.setAssignedUser(user); 
+        } else {
+            user.setXp(Math.max(0, currentXp - xpValue));
+        }
+
+        userRepository.save(user);
         return convertToResponseDTO(taskRepository.save(task));
     }
 

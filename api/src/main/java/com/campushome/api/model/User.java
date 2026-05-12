@@ -47,6 +47,8 @@ public class User {
 
     private String telefone;
 
+    private Integer xp = 0;
+
     // Apenas para estudantes
     private String course; // Literalmente o curso do usuário
 

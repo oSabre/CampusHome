@@ -20,5 +20,7 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
 
     List<Advertisement> findByActiveTrue();
 
+    List<Advertisement> findByOwnerId(Long ownerId);
+
 
 }

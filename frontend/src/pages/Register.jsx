@@ -11,7 +11,7 @@ export default function Register() {
     e.preventDefault();
     
     // Define o endpoint baseado na role (ajuste conforme seu Controller)
-    const endpoint = role === 'STUDENT' ? '/api/users/register/student' : '/api/users/register/owner';
+    const endpoint = role === 'STUDENT' ? '/users/register/student' : '/users/register/owner';
     
     try {
       await api.post(endpoint, formData);
@@ -64,14 +64,14 @@ export default function Register() {
 
           {/* Campos Dinâmicos */}
           {role === 'STUDENT' ? (
-            <input name="course" placeholder="Seu Curso Superior" onChange={handleChange}
+            <input name="course" placeholder="Seu Curso Superior" onChange={handleChange} required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
           ) : (
-            <input name="cpfCnpj" placeholder="CPF/CNPJ" onChange={handleChange}
+            <input name="cpfCnpj" placeholder="CPF/CNPJ" onChange={handleChange} required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
           )}
 
-          <textarea name="bio" placeholder="Conte um pouco sobre você..." onChange={handleChange}
+          <textarea name="bio" placeholder="Conte um pouco sobre você..." onChange={handleChange} required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none h-24 resize-none" />
 
           <button type="submit" 

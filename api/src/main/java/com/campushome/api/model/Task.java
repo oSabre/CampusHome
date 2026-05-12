@@ -34,4 +34,8 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "housing_group_id", nullable = false)
     private HousingGroup housingGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User assignedUser;
 }   

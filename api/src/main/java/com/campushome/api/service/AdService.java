@@ -85,4 +85,17 @@ public class AdService {
         ad.setActive(!ad.isActive());
         adRepository.save(ad);
     }
+
+    public List<AdResponseDTO> getAdsByOwner(Long ownerId){
+        List<Advertisement> ads = adRepository.findByOwnerId(ownerId);
+
+        return ads.stream().map(ad -> new AdResponseDTO(
+            ad.getId(),
+            ad.getTitle(),
+            ad.getPrice(),
+            ad.getNeighborhood(),
+            ad.getOwner().getName(), // Certifique-se que sua classe User tem getName()
+            ad.isActive()
+        )).toList();
+    }
 }
