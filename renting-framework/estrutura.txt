@@ -1,0 +1,42 @@
+renting-framework/                          (parent pom, packaging=pom)
+├── pom.xml                                 <modules>renting-core, campushome-app, ...</modules>
+│
+├── renting-core/                           packaging=jar
+│   ├── pom.xml
+│   └── src/main/java/com/rentingframework/core/
+│       ├── model/
+│       │   ├── User.java                   @MappedSuperclass
+│       │   ├── Listing.java                @MappedSuperclass
+│       │   ├── Request.java                @MappedSuperclass
+│       │   ├── Group.java
+│       │   ├── Message.java
+│       │   └── Task.java                   @MappedSuperclass
+│       ├── service/
+│       │   ├── MatchingStrategy.java        interface, LLM-based
+│       │   ├── RequestService.java          accept/reject → triggers group formation
+│       │   ├── GroupService.java            group + message handling
+│       │   └── RewardPolicy.java            interface, gamification hook
+│       ├── repository/
+│       │   ├── GroupRepository.java
+│       │   └── MessageRepository.java
+│       ├── dto/
+│       │   └── MatchResponseDTO.java
+│       └── config/
+│           └── AIConfig.java                ChatClient bean
+│
+├── campushome-app/                         packaging=jar (Spring Boot app)
+│   ├── pom.xml                             depends on renting-core
+│   └── src/main/java/com/campushome/api/
+│       ├── model/       HousingListing, Interest, HousingGroup, Task extensions
+│       ├── service/     HousingMatchingStrategy, HousingGroupService
+│       ├── controller/  AdController, InterestController, ...
+│       ├── dto/         (all your existing DTOs, unchanged)
+│       ├── enums/       UserRole, InterestStatus
+│       └── CampusHomeApplication.java
+│   └── src/main/resources/application.properties
+│
+├── carpooling-app/                         same shape as above
+│   └── .../model/ SharedVehicleListing, Booking, ...
+│
+└── expert-app/                              same shape as above
+    └── .../model/ ExpertSlotListing, Session, ...

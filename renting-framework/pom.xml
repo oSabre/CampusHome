@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+ 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.0</version>
+		<relativePath/>
+	</parent>
+ 
+	<groupId>com.rentingframework</groupId>
+	<artifactId>renting-framework</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>renting-framework</name>
+	<description>Shared renting/booking framework - parent aggregator</description>
+ 
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+ 
+	<!--
+		Add each app module here once its folder exists.
+		Maven resolves build order from these dependencies automatically,
+		so renting-core always builds before any app that depends on it.
+	-->
+	<modules>
+		<module>renting-core</module>
+		<module>campushome-app</module>
+		<module>carpooling-app</module>
+		<module>expert-app</module>
+	</modules>
+ 
+	<!--
+		Import-only here: this makes the spring-ai-bom's managed versions
+		available to any child module, without forcing spring-ai itself
+		onto modules that don't need it.
+	-->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>1.0.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+ 
+	<!--
+		Lombok is the one dependency truly every module needs (core and
+		every app), so it lives here instead of being repeated four times.
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+ 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--
+					Declared here (not under <plugins>) so it configures the
+					compiler plugin's default execution in every child module
+					without attaching a plugin execution to this pom itself,
+					since this pom has no source to compile.
+				-->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+							</path>
+						</annotationProcessorPaths>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+ 
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+ 
+</project>

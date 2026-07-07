@@ -9,6 +9,36 @@
             "projectName": "api",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CampusHomeApplication<campushome-app>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.campushome.api.CampusHomeApplication",
+            "projectName": "campushome-app",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CarpoolingApplication<carpooling-app>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.carpooling.api.CarpoolingApplication",
+            "projectName": "carpooling-app",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ExpertApplication<expert-app>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.expert.api.ExpertApplication",
+            "projectName": "expert-app",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
